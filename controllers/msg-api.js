@@ -32,20 +32,29 @@ const getAllMessages = (req,res) => {
 // POST Request Handler
 
 const addNewMessage = async (req,res) => {
-    try {
-        let message = await messageSchema.validate(req.body);
-        messages.unshift(message);
-        console.log(message)
-        res 
-            .status(201)
-            .send(message)
-        //add message as first element of the array
-        //respond with 201 created and the message in the body of the response
-    }catch(error){
-        res
+    // try {
+    //     let message = await messageSchema.validate(req.body);
+    //     messages.unshift(message);
+    //     console.log(message)
+    //     res 
+    //         .status(201)
+    //         .send(message)
+
+    // }catch(error){
+    //     res
+    //         .status(400)
+    //         .send('Bad Request. The message in the body of the Request is either missing or malformed')
+    // }
+    messageModel
+    .create( req.body, (error, message) => {
+        if (error) {
+            res
             .status(400)
-            .send('Bad Request. The message in the body of the Request is either missing or malformed')
-    }
+            .send('Bad Request. The message in the body of the Request is either missing or malformed');
+        }else{
+            res.status(201).json(message);
+        }
+    });
 };
 
 module.exports = {
