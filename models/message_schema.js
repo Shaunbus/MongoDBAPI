@@ -22,11 +22,18 @@ const messageSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        match: /[A-Za-z]{2,}/
+        match: /[A-Za-z]{2,}/,
+        trim: true,
+        minlength: 2,
+        maxlength: 10
+
     },
     msg: {
         type: String,
-        required: true
+        required: true,
+        trim:true,
+        minlength: 3,
+        maxlength: 30
     }
 });
 module.exports = mongoose.model('message', messageSchema);
