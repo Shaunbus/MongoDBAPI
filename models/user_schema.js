@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const argon2 = require('argon2');
 
-const user = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -26,4 +27,17 @@ const user = new mongoose.Schema({
         maxlength: 30
     }
 });
-module.exports = mongoose.model('user', user);
+
+userSchema.pre('save', async function(){
+    //hash and salt password
+    try {
+        const hash = await argon2.hash(this.password, {
+            type: argon2.argon2id
+        });
+        this.password = hash;
+    } catch (err) {
+        console.log('Error in hasing password' + err);
+    }
+});
+
+module.exports = mongoose.model('user', userSchema);
