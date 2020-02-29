@@ -6,6 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 require('./db');
 const rateLimit = require('express-rate-limit');
+const passport = require('passport');
 
 const apiRouter = require('./routes/api_router');
 
@@ -18,5 +19,6 @@ app.use(cookieParser());
 app.use(cors());
 app.use(rateLimit());
 app.use('/', apiRouter);
+app.use(passport.initialize());
 
 module.exports = app;

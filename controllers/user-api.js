@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const userModel = mongoose.model('user');
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
 
 const registerNewUser = (req, res) => {
     //res.status(200).send('Successful API New User POST Request');
@@ -37,6 +39,30 @@ const registerNewUser = (req, res) => {
         }
     });
 }
+
+//basic authentication strategy
+
+passport.use(new BasicStrategy(
+(username, password, done) => {
+    userModel
+    .findOne({
+        '$or': [
+            { email: username },
+            { username: username }
+        ]
+    })
+    .exec( async (error, user) => {
+        if (error) return done(error);
+
+        //user wasn't found
+        if (!user) return done(null, false);
+
+        //user was found, see if it's a valid password
+        if (!await user.verifyPassword(password)) { return done(null, false); }
+        return done(null, user);
+    });
+}
+));
 
 module.exports = {
     registerNewUser
