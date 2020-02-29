@@ -40,4 +40,14 @@ userSchema.pre('save', async function(){
     }
 });
 
+userSchema.methods.verifyPassword = 
+    async function(plainTextPassword) {
+        const dbHashedPassword = this.password;
+        try {
+            return await argon2.verify(dbHashedPassword. plainTextPassword);
+        } catch (err) {
+            console.log('Error verifying password' + err);
+        }
+    }
+
 module.exports = mongoose.model('user', userSchema);
