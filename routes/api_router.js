@@ -9,10 +9,16 @@ const msgAPIController = require('../controllers/msg-api');
 router.route('/users')
 .post(userApiController.registerNewUser);
 
+//routing logic for login
+router.route('/login')
+.post(userApiController.login)
+
 //routing logic for message
 router.route('/messages')
 .get(msgAPIController.getAllMessages)
 .post(passport.authenticate('basic', {session: false}),
     msgAPIController.addNewMessage);
+
+
 
 module.exports = router;

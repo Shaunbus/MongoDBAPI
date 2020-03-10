@@ -64,6 +64,12 @@ passport.use(new BasicStrategy(
 }
 ));
 
+//Login Handler
+const login = (req,res) => {
+    res.status(200).send('Successful API Login Request');
+};
+
 module.exports = {
-    registerNewUser
+    registerNewUser,
+    login
 };
