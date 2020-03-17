@@ -11,7 +11,8 @@ router.route('/users')
 
 //routing logic for login
 router.route('/login')
-.post(userApiController.login)
+.post(passport.authenticate('local', {session: false}),
+userApiController.login);
 
 //routing logic for message
 router.route('/messages')

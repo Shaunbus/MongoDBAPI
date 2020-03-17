@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const userModel = mongoose.model('user');
 const passport = require('passport');
-const BasicStrategy = require('passport-http').BasicStrategy;
+const LocalStrategy = require('passport-local');
 
 const registerNewUser = (req, res) => {
     //res.status(200).send('Successful API New User POST Request');
@@ -42,7 +42,7 @@ const registerNewUser = (req, res) => {
 
 //basic authentication strategy
 
-passport.use(new BasicStrategy(
+passport.use(new LocalStrategy(
 (username, password, done) => {
     userModel
     .findOne({
