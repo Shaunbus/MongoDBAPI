@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const userModel = mongoose.model('user');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const jwt = require('jsonwebtoken');
 
 const registerNewUser = (req, res) => {
     //res.status(200).send('Successful API New User POST Request');
@@ -66,7 +67,21 @@ passport.use(new LocalStrategy(
 
 //Login Handler
 const login = (req,res) => {
-    res.status(200).send('Successful API Login Request');
+    // res.status(200).send('Successful API Login Request');
+    jwt.sign(
+        { sub: req.user._id},
+        process.env.JWT_SECRET,
+        { expiresIn: '1h'},
+        ( error,token ) => {
+            if (error) {
+                res
+                .status(400)
+                .send('Bad Request. Couldn\'t generate token.');
+            } else {
+                res.status(200).json({ token: token });
+            }
+        }
+    );
 };
 
 module.exports = {
